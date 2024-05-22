@@ -67,6 +67,6 @@ class ASCIILine:
         if v is None:
             return
         if self.style.begin is not None and self.style.begin != "":
-            pane[srcy][srcx] = colorer(self.style.begin)
+            pane[srcy][srcx] = wrap(self.style.wrap(self.style.begin))
         if self.style.end is not None and self.style.end != "":
-            pane[tary][tarx] = colorer(self.style.end)
+            pane[tary][tarx] = wrap(self.style.wrap(self.style.end))
