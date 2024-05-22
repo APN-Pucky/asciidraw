@@ -12,8 +12,10 @@ class ASCIILine:
     def draw(
         self,
         pane,
-        isrc,
-        itar,
+        isrcx,
+        isrcy,
+        itarx,
+        itary,
         scalex=1,
         scaley=1,
         kickx=0,
@@ -24,10 +26,10 @@ class ASCIILine:
         # width = len(pane[0])
         # height = len(pane)
         # TODO normalize to width and height as well
-        srcx = int((isrc.x + kickx) * scalex)
-        srcy = int((isrc.y + kicky) * scaley)
-        tarx = int((itar.x + kickx) * scalex)
-        tary = int((itar.y + kicky) * scaley)
+        srcx = int((isrcx + kickx) * scalex)
+        srcy = int((isrcy + kicky) * scaley)
+        tarx = int((itarx + kickx) * scalex)
+        tary = int((itary + kicky) * scaley)
 
         if abs(srcx - tarx) > abs(srcy - tary):
             for i in range(srcx, tarx, 1 if srcx < tarx else -1):
