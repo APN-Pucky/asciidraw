@@ -1,17 +1,40 @@
 import math
 from typing import Iterable
 
+try:
+    import colorama
+    from termcolor import colored
+except ImportError:
+    warn("colorama and termcolor are required for colored ASCII rendering")
+
+    def colored(text, color):
+        return text
+
 
 class Style:
-    def __init__(self, style=None, **kwargs):
+    def __init__(self, style=None, color=None, wrap=lambda x: x, **kwargs):
+        if color is None:
+            self.color = lambda x: x
+        else:
+            self.color = lambda x: colored(x, color)
+        # first custom wrap, then color
+        self.wrap = lambda x: self.color(wrap(x))
+
+
+class LineStyle(Style):
+    def __init__(self, style=None, begin=None, end=None, **kwargs):
+        super().__init__(style=style, **kwargs)
+
         self.index = -1
+        self.begin = begin
+        self.end = end
 
     def next(self, dirx, diry):
         self.index += 1
         return (math.atan2(diry, dirx) + math.pi) % (2 * math.pi)
 
 
-class LineStyle(Style):
+class SimpleLineStyle(LineStyle):
     def __init__(self, style=None, terminate=True, **kwargs):
         super().__init__(**kwargs)
 
@@ -34,7 +57,7 @@ class LineStyle(Style):
         return self.get(self.index)
 
 
-class Cross(Style):
+class Cross(LineStyle):
     def __init__(
         self, vert=None, horz=None, left=None, up=None, right=None, down=None, **kwargs
     ):
@@ -51,10 +74,10 @@ class Cross(Style):
             right = horz
             left = horz
 
-        self.left = LineStyle(style=left)
-        self.right = LineStyle(style=right)
-        self.up = LineStyle(style=up)
-        self.down = LineStyle(style=down)
+        self.left = SimpleLineStyle(style=left)
+        self.right = SimpleLineStyle(style=right)
+        self.up = SimpleLineStyle(style=up)
+        self.down = SimpleLineStyle(style=down)
 
     def next(self, dirx, diry):
         angle = super().next(dirx, diry)
@@ -74,7 +97,7 @@ class Cross(Style):
             raise Exception("Angle not in range")
 
 
-class Compass(Style):
+class Compass(LineStyle):
     def __init__(
         self,
         nn=None,
@@ -89,14 +112,14 @@ class Compass(Style):
     ):
         super().__init__(**kwargs)
 
-        self.nn = LineStyle(style=nn)
-        self.ne = LineStyle(style=ne)
-        self.ee = LineStyle(style=ee)
-        self.se = LineStyle(style=se)
-        self.ss = LineStyle(style=ss)
-        self.sw = LineStyle(style=sw)
-        self.ww = LineStyle(style=ww)
-        self.nw = LineStyle(style=nw)
+        self.nn = SimpleLineStyle(style=nn)
+        self.ne = SimpleLineStyle(style=ne)
+        self.ee = SimpleLineStyle(style=ee)
+        self.se = SimpleLineStyle(style=se)
+        self.ss = SimpleLineStyle(style=ss)
+        self.sw = SimpleLineStyle(style=sw)
+        self.ww = SimpleLineStyle(style=ww)
+        self.nw = SimpleLineStyle(style=nw)
 
     def next(self, dirx, diry):
         angle = (super().next(dirx, diry) + math.pi * 3.0 / 2.0) % (2 * math.pi)

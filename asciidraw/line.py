@@ -1,13 +1,26 @@
+import warnings
+
+
 class ASCIILine:
     def __init__(
         self,
         style,
-        begin=" ",
-        end=" ",
+        begin=None,
+        end=None,
     ):
-        self.begin = begin
-        self.end = end
         self.style = style
+        if begin is not None:
+            warnings.warn(
+                "begin is deprecated, use style.begin instead. Set it in style for now.",
+                DeprecationWarning,
+            )
+            self.style.end = end
+        if end is not None:
+            warnings.warn(
+                "end is deprecated, use style.end instead. Set it in style for now.",
+                DeprecationWarning,
+            )
+            self.style.begin = begin
 
     def draw(
         self,
@@ -20,7 +33,7 @@ class ASCIILine:
         scaley=1,
         kickx=0,
         kicky=0,
-        colorer=lambda x: x,
+        wrap=lambda x: x,
         **kwargs,
     ):
         # width = len(pane[0])
@@ -31,26 +44,29 @@ class ASCIILine:
         tarx = int((itarx + kickx) * scalex)
         tary = int((itary + kicky) * scaley)
 
+        xsign = 1 if srcx < tarx else -1
+        ysign = 1 if srcy < tary else -1
+
         if abs(srcx - tarx) > abs(srcy - tary):
-            for i in range(srcx, tarx, 1 if srcx < tarx else -1):
+            for i in range(srcx, tarx + xsign, xsign):
                 v = self.style.next(tarx - srcx, tary - srcy)
                 if v is not None:
                     pane[round(srcy + (tary - srcy) * (i - srcx) / (-srcx + tarx))][
                         i
-                    ] = colorer(v)
+                    ] = wrap(self.style.wrap(v))
         else:
-            for i in range(srcy, tary, 1 if srcy < tary else -1):
+            for i in range(srcy, tary + ysign, ysign):
                 v = self.style.next(tarx - srcx, tary - srcy)
                 if v is not None:
                     pane[i][
                         round(srcx + (tarx - srcx) * (i - srcy) / (-srcy + tary))
-                    ] = colorer(v)
+                    ] = wrap(self.style.wrap(v))
         # call once to increase the index
         v = self.style.next(tarx - srcx, tary - srcy)
 
         if v is None:
             return
-        if self.begin is not None and self.begin != "":
-            pane[srcy][srcx] = colorer(self.begin)
-        if self.end is not None and self.end != "":
-            pane[tary][tarx] = colorer(self.end)
+        if self.style.begin is not None and self.style.begin != "":
+            pane[srcy][srcx] = colorer(self.style.begin)
+        if self.style.end is not None and self.style.end != "":
+            pane[tary][tarx] = colorer(self.style.end)
