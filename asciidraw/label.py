@@ -6,16 +6,19 @@ from .style import Cross
 
 
 class Label(ASCIILine):
-    def __init__(self, label, handle_tex=True):
+    def __init__(self, label, handle_tex=True, color=None):
         if handle_tex:
             self.label = self.handle_tex(label)
         else:
             self.label = label
         super().__init__(
-            begin=None,
-            end=None,
             style=Cross(
-                vert=[*self.label, None], horz=[*self.label, None], terminate=True
+                vert=[*self.label, None],
+                horz=[*self.label, None],
+                terminate=True,
+                begin=None,
+                end=None,
+                color=color,
             ),
         )
 
@@ -40,47 +43,59 @@ class Label(ASCIILine):
     def draw(
         self,
         pane,
-        isrc,
-        itar,
+        isrcx,
+        isrcy,
+        itarx,
+        itary,
         scalex=1,
         scaley=1,
         kickx=0,
         kicky=0,
-        colorer=lambda x: x,
+        wrap=lambda x: x,
         **kwargs
     ):
-        jsrc = copy.copy(isrc)
-        jtar = copy.copy(itar)
 
         # reduce length to 1/3 in the middle
-        jsrc.x = (itar.x - isrc.x) / 3.0 + isrc.x
-        jsrc.y = (itar.y - isrc.y) / 3.0 + isrc.y
-        jtar.x = (itar.x - isrc.x) / 3.0 * 2.0 + isrc.x
-        jtar.y = (itar.y - isrc.y) / 3.0 * 2.0 + isrc.y
+        jsrcx = (itarx - isrcx) / 3.0 + isrcx
+        jsrcy = (itary - isrcy) / 3.0 + isrcy
+        jtarx = (itarx - isrcx) / 3.0 * 2.0 + isrcx
+        jtary = (itary - isrcy) / 3.0 * 2.0 + isrcy
 
         ## shift the line
         shift = 3.0
         # horizonral
-        if abs(isrc.x - itar.x) > abs(isrc.y - itar.y):
+        if abs(isrcx - itarx) > abs(isrcy - itary):
             # left to right -> shift up
-            if isrc.x < itar.x:
-                jsrc.y -= shift / scaley
-                jtar.y -= shift / scaley
+            if isrcx < itarx:
+                jsrcy -= shift / scaley
+                jtary -= shift / scaley
             # right to left -> shift down
             else:
-                jsrc.y += shift / scaley
-                jtar.y += shift / scaley
+                jsrcy += shift / scaley
+                jtary += shift / scaley
 
         # vertical
         else:
             # up to down -> shift left
-            if isrc.y < itar.y:
-                jsrc.x -= shift / scalex
-                jtar.x -= shift / scalex
+            if isrcy < itary:
+                jsrcx -= shift / scalex
+                jtarx -= shift / scalex
             # down to up -> shift right
             else:
-                jsrc.x += shift / scalex
-                jtar.x += shift / scalex
+                jsrcx += shift / scalex
+                jtarx += shift / scalex
 
-        super().draw(pane, jsrc, jtar, scalex, scaley, kickx, kicky, colorer, **kwargs)
+        super().draw(
+            pane,
+            jsrcx,
+            jsrcy,
+            jtarx,
+            jtary,
+            scalex,
+            scaley,
+            kickx,
+            kicky,
+            wrap,
+            **kwargs
+        )
         self.index = 0
