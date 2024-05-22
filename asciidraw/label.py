@@ -1,8 +1,8 @@
 import copy
 import re
 
-from pyfeyn2.render.text.line import ASCIILine
-from pyfeyn2.render.text.style import Cross
+from line import ASCIILine
+from style import Cross
 
 
 class Label(ASCIILine):
