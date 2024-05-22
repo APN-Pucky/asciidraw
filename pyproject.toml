@@ -7,7 +7,7 @@ readme = "README.md"
 repository = "https://github.com/APN-Pucky/asciidraw"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.8"
 colorama = "*"
 termcolor = "*"
 

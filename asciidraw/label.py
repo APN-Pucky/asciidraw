@@ -1,8 +1,8 @@
 import copy
 import re
 
-from line import ASCIILine
-from style import Cross
+from .line import ASCIILine
+from .style import Cross
 
 
 class Label(ASCIILine):
