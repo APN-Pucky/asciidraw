@@ -54,9 +54,6 @@ Source = "https://github.com/APN-Pucky/asciidraw/"
 [tool.hatch.version]
 source = "vcs"
 
-[tool.ruff]
-line-length = 79
-
 [tool.ruff.lint]
 extend-select = [
   "B",        # flake8-bugbear
