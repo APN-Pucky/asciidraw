@@ -1,45 +1,91 @@
-[tool.poetry]
-name = "asciidraw"
-version = "0.0.1"
-description = "asciidraw is a simple python library to draw ascii art diagrams."
-authors = ["Alexander Puck Neuwirth <alexander@neuwirth-informatik.de>"]
-readme = "README.md"
-repository = "https://github.com/APN-Pucky/asciidraw"
-
-[tool.poetry.dependencies]
-python = "^3.8"
-colorama = "*"
-termcolor = "*"
-
-[tool.poetry.group.dev]
-optional = true
-
-[tool.poetry.group.dev.dependencies]
-pre-commit = ">=2.20,<4.0"
-ipython =  "*"
-jupyterlab =  "*"
-jupyter = "*"
-poetry-dynamic-versioning = {extras = ["plugin"], version = ">=0.21.1,<1.3.0"}
-
 [build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
-build-backend = "poetry_dynamic_versioning.backend"
+requires = [
+  "hatchling",
+  "hatch-vcs",
+]
+build-backend = "hatchling.build"
 
-[tool.poetry-dynamic-versioning]
-enable = true
-vcs = "git"
-style = "pep440"
-dirty = true
-# modified dunami default pattern without v
-pattern = '(?x)(?# ignore whitespace)^((?P<epoch>\d+)!)?(?P<base>\d+(\.\d+)*)(?# v1.2.3 or v1!2000.1.2)([-._]?((?P<stage>[a-zA-Z]+)[-._]?(?P<revision>\d+)?))?(?# b0)(\+(?P<tagged_metadata>.+))?$(?# +linux)'
-strict = true
-format-jinja = "{% if distance == 0 %}{{ base }}{% else %}{{ base }}.{{ distance }}{% endif %}"
+[project]
+name = "asciidraw"
+dynamic = ["version"]
+description = 'A simple python library to draw ascii art diagrams'
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = []
+authors = [
+  { name = "Alexander Puck Neuwirth", email = "alexander@neuwirth-informatik.de" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "colorama",
+  "termcolor",
+]
+[project.optional-dependencies]
+lint = [
+    "ruff",
+]
+dev = [
+    "pre-commit",
+    "ipython",
+    "jupyter",
+    "jupyterlab",
+]
 
+[project.urls]
+Issues = "https://github.com/APN-Pucky/asciidraw/issues"
+Source = "https://github.com/APN-Pucky/asciidraw/"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.ruff.lint]
+extend-select = [
+  "B",        # flake8-bugbear
+  "I",        # isort
+  "ARG",      # flake8-unused-arguments
+  "C4",       # flake8-comprehensions
+  "EM",       # flake8-errmsg
+  "ICN",      # flake8-import-conventions
+  "G",        # flake8-logging-format
+  "PGH",      # pygrep-hooks
+  "PIE",      # flake8-pie
+  "PL",       # pylint
+  "PT",       # flake8-pytest-style
+  "RET",      # flake8-return
+  "RUF",      # Ruff-specific
+  "SIM",      # flake8-simplify
+  "UP",       # pyupgrade
+  "YTT",      # flake8-2020
+  "EXE",      # flake8-executable
+  "NPY",      # NumPy specific rules
+  "PD",       # pandas-vet
+  "FURB",     # refurb
+  "PYI",      # flake8-pyi
+]
+ignore = [
+  "PLR09",    # Too many <...>
+  "PLR2004",  # Magic value used in comparison
+  "ISC001",   # Conflicts with formatter
+  "RUF012",   # TODO: mutable class attributes
+  "SIM115",   # TODO: use context manager for opening files
+]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = ["tests"]
-addopts = [ "-Werror","-v","--cov=pyfeyn2","--cov-config=.coveragerc","--cov-append","--cov-report=term","--cov-report=xml","--doctest-modules","--ignore=docs/source/conf.py" ]
+addopts = [ "-Werror","-v","--cov=asciidraw","--cov-config=.coveragerc","--cov-append","--cov-report=term","--cov-report=xml","--doctest-modules","--ignore=docs/source/conf.py" ]
 filterwarnings = [
     'error',
     'ignore: pkg_resources is deprecated as an API:DeprecationWarning'
