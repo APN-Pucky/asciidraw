@@ -5,7 +5,8 @@ try:
     from termcolor import colored
 except ImportError:
     warn(
-        "colorama and termcolor are required for colored ASCII rendering", stacklevel=2
+        "colorama and termcolor are required for colored ASCII rendering",
+        stacklevel=2,
     )
 
     def colored(text, color):  # noqa: ARG001

@@ -11,14 +11,18 @@ class ASCIILine:
         self.style = style
         if begin is not None:
             warnings.warn(
-                "begin is deprecated, use style.begin instead. Set it in style for now.",
+                "begin is deprecated, use style.begin instead.\
+                Set it in style for now.",
                 DeprecationWarning,
+                stacklevel=2,
             )
             self.style.end = end
         if end is not None:
             warnings.warn(
-                "end is deprecated, use style.end instead. Set it in style for now.",
+                "end is deprecated, use style.end instead.\
+                Set it in style for now.",
                 DeprecationWarning,
+                stacklevel=2,
             )
             self.style.begin = begin
 
@@ -34,7 +38,7 @@ class ASCIILine:
         kickx=0,
         kicky=0,
         wrap=lambda x: x,
-        **kwargs,
+        **kwargs,  # noqa: ARG002
     ):
         # width = len(pane[0])
         # height = len(pane)
@@ -51,15 +55,19 @@ class ASCIILine:
             for i in range(srcx, tarx + xsign, xsign):
                 v = self.style.next(tarx - srcx, tary - srcy)
                 if v is not None:
-                    pane[round(srcy + (tary - srcy) * (i - srcx) / (-srcx + tarx))][
-                        i
-                    ] = wrap(self.style.wrap(v))
+                    pane[
+                        round(
+                            srcy + (tary - srcy) * (i - srcx) / (-srcx + tarx)
+                        )
+                    ][i] = wrap(self.style.wrap(v))
         else:
             for i in range(srcy, tary + ysign, ysign):
                 v = self.style.next(tarx - srcx, tary - srcy)
                 if v is not None:
                     pane[i][
-                        round(srcx + (tarx - srcx) * (i - srcy) / (-srcy + tary))
+                        round(
+                            srcx + (tarx - srcx) * (i - srcy) / (-srcy + tary)
+                        )
                     ] = wrap(self.style.wrap(v))
         # call once to increase the index
         v = self.style.next(tarx - srcx, tary - srcy)

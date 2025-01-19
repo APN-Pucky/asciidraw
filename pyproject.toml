@@ -54,8 +54,8 @@ Source = "https://github.com/APN-Pucky/asciidraw/"
 [tool.hatch.version]
 source = "vcs"
 
-[tool.flake8]
-max-line-length = 0
+[tool.ruff]
+line-length = 80
 
 [tool.ruff.lint]
 extend-select = [
