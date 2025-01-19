@@ -1,18 +1,33 @@
 import math
 from typing import Iterable
+from warnings import warn
 
 try:
-    import colorama
+    import colorama  # noqa: F401
     from termcolor import colored
 except ImportError:
-    warn("colorama and termcolor are required for colored ASCII rendering")
+    warn(
+        "colorama and termcolor are required for colored ASCII rendering",
+        stacklevel=2,
+    )
 
-    def colored(text, color):
+    def colored(text, color):  # noqa: ARG001
         return text
 
 
 class Style:
-    def __init__(self, style=None, color=None, wrap=lambda x: x, **kwargs):
+    def __init__(
+        self,
+        style=None,  # noqa: ARG002
+        color=None,
+        wrap=None,
+        **kwargs,  # noqa: ARG002
+    ):
+        if wrap is None:
+
+            def wrap(x):
+                return x
+
         if color is None:
             self.color = lambda x: x
         else:
@@ -59,7 +74,14 @@ class SimpleLineStyle(LineStyle):
 
 class Cross(LineStyle):
     def __init__(
-        self, vert=None, horz=None, left=None, up=None, right=None, down=None, **kwargs
+        self,
+        vert=None,
+        horz=None,
+        left=None,
+        up=None,
+        right=None,
+        down=None,
+        **kwargs,
     ):
         super().__init__(**kwargs)
 
@@ -85,16 +107,16 @@ class Cross(LineStyle):
         if angle <= math.pi / 4 or angle > 7 * math.pi / 4:
             return self.left.get(self.index)
         # left
-        elif angle >= 3 * math.pi / 4 and angle < 5 * math.pi / 4:
+        if angle >= 3 * math.pi / 4 and angle < 5 * math.pi / 4:
             return self.right.get(self.index)
         # up
-        elif angle >= math.pi / 4 and angle < 3 * math.pi / 4:
+        if angle >= math.pi / 4 and angle < 3 * math.pi / 4:
             return self.up.get(self.index)
         # down
-        elif angle >= 5 * math.pi / 4 and angle < 7 * math.pi / 4:
+        if angle >= 5 * math.pi / 4 and angle < 7 * math.pi / 4:
             return self.down.get(self.index)
-        else:
-            raise Exception("Angle not in range")
+        err = "Angle not in range"
+        raise Exception(err)
 
 
 class Compass(LineStyle):
@@ -108,7 +130,7 @@ class Compass(LineStyle):
         sw=None,
         ww=None,
         nw=None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(**kwargs)
 
@@ -122,30 +144,32 @@ class Compass(LineStyle):
         self.nw = SimpleLineStyle(style=nw)
 
     def next(self, dirx, diry):
-        angle = (super().next(dirx, diry) + math.pi * 3.0 / 2.0) % (2 * math.pi)
+        angle = (super().next(dirx, diry) + math.pi * 3.0 / 2.0) % (
+            2 * math.pi
+        )
         # nn
         if angle < math.pi / 8 or angle > 15 * math.pi / 8:
             return self.nn.get(self.index)
         # ne
-        elif angle > math.pi / 8 and angle < 3 * math.pi / 8:
+        if angle > math.pi / 8 and angle < 3 * math.pi / 8:
             return self.ne.get(self.index)
         # ee
-        elif angle > 3 * math.pi / 8 and angle < 5 * math.pi / 8:
+        if angle > 3 * math.pi / 8 and angle < 5 * math.pi / 8:
             return self.ee.get(self.index)
         # se
-        elif angle > 5 * math.pi / 8 and angle < 7 * math.pi / 8:
+        if angle > 5 * math.pi / 8 and angle < 7 * math.pi / 8:
             return self.se.get(self.index)
         # ss
-        elif angle > 7 * math.pi / 8 and angle < 9 * math.pi / 8:
+        if angle > 7 * math.pi / 8 and angle < 9 * math.pi / 8:
             return self.ss.get(self.index)
         # sw
-        elif angle > 9 * math.pi / 8 and angle < 11 * math.pi / 8:
+        if angle > 9 * math.pi / 8 and angle < 11 * math.pi / 8:
             return self.sw.get(self.index)
         # ww
-        elif angle > 11 * math.pi / 8 and angle < 13 * math.pi / 8:
+        if angle > 11 * math.pi / 8 and angle < 13 * math.pi / 8:
             return self.ww.get(self.index)
         # nw
-        elif angle > 13 * math.pi / 8 and angle < 15 * math.pi / 8:
+        if angle > 13 * math.pi / 8 and angle < 15 * math.pi / 8:
             return self.nw.get(self.index)
-        else:
-            raise Exception("Angle not in range")
+        err = "Angle not in range"
+        raise Exception(err)
