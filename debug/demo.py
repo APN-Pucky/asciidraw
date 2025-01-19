@@ -1,7 +1,7 @@
 from asciidraw.line import ASCIILine
 from asciidraw.pane import ASCIIPane
 from asciidraw.point import ASCIIPoint
-from asciidraw.style import Compass, LineStyle, SimpleLineStyle, colored
+from asciidraw.style import Compass, SimpleLineStyle, colored
 
 pane = ASCIIPane(10, 10)
 

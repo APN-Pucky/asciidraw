@@ -1,4 +1,3 @@
-import copy
 import re
 
 from .line import ASCIILine
@@ -52,16 +51,15 @@ class Label(ASCIILine):
         kickx=0,
         kicky=0,
         wrap=lambda x: x,
-        **kwargs
+        **kwargs,
     ):
-
         # reduce length to 1/3 in the middle
         jsrcx = (itarx - isrcx) / 3.0 + isrcx
         jsrcy = (itary - isrcy) / 3.0 + isrcy
         jtarx = (itarx - isrcx) / 3.0 * 2.0 + isrcx
         jtary = (itary - isrcy) / 3.0 * 2.0 + isrcy
 
-        ## shift the line
+        # shift the line
         shift = 3.0
         # horizonral
         if abs(isrcx - itarx) > abs(isrcy - itary):
@@ -75,15 +73,14 @@ class Label(ASCIILine):
                 jtary += shift / scaley
 
         # vertical
+        # up to down -> shift left
+        elif isrcy < itary:
+            jsrcx -= shift / scalex
+            jtarx -= shift / scalex
+        # down to up -> shift right
         else:
-            # up to down -> shift left
-            if isrcy < itary:
-                jsrcx -= shift / scalex
-                jtarx -= shift / scalex
-            # down to up -> shift right
-            else:
-                jsrcx += shift / scalex
-                jtarx += shift / scalex
+            jsrcx += shift / scalex
+            jtarx += shift / scalex
 
         super().draw(
             pane,
@@ -96,6 +93,6 @@ class Label(ASCIILine):
             kickx,
             kicky,
             wrap,
-            **kwargs
+            **kwargs,
         )
         self.index = 0
