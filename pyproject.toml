@@ -42,6 +42,9 @@ dev = [
     "jupyter",
     "jupyterlab",
 ]
+test = [
+    "pytest"
+]
 
 [project.urls]
 Issues = "https://github.com/APN-Pucky/asciidraw/issues"
