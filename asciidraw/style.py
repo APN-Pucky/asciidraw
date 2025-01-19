@@ -133,7 +133,9 @@ class Compass(LineStyle):
         self.nw = SimpleLineStyle(style=nw)
 
     def next(self, dirx, diry):
-        angle = (super().next(dirx, diry) + math.pi * 3.0 / 2.0) % (2 * math.pi)
+        angle = (super().next(dirx, diry) + math.pi * 3.0 / 2.0) % (
+            2 * math.pi
+        )
         # nn
         if angle < math.pi / 8 or angle > 15 * math.pi / 8:
             return self.nn.get(self.index)

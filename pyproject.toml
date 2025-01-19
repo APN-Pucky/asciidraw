@@ -55,7 +55,7 @@ Source = "https://github.com/APN-Pucky/asciidraw/"
 source = "vcs"
 
 [tool.ruff]
-line-length = 80
+line-length = 79
 
 [tool.ruff.lint]
 extend-select = [
