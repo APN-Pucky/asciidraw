@@ -5,8 +5,9 @@ from asciidraw.style import Compass, SimpleLineStyle, colored
 
 pane = ASCIIPane(10, 10)
 
-
-starline = ASCIILine(begin=None, end="", style=SimpleLineStyle(["*"], color="red"))
+starline = ASCIILine(
+    begin=None, end="", style=SimpleLineStyle(["*"], color="red")
+)
 arrowline = ASCIILine(
     begin="",
     end="",

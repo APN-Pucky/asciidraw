@@ -7,7 +7,8 @@ try:
     from termcolor import colored
 except ImportError:
     warn(
-        "colorama and termcolor are required for colored ASCII rendering", stacklevel=2
+        "colorama and termcolor are required for colored ASCII rendering",
+        stacklevel=2,
     )
 
     def colored(text, color):  # noqa: ARG001
@@ -62,7 +63,14 @@ class SimpleLineStyle(LineStyle):
 
 class Cross(LineStyle):
     def __init__(
-        self, vert=None, horz=None, left=None, up=None, right=None, down=None, **kwargs
+        self,
+        vert=None,
+        horz=None,
+        left=None,
+        up=None,
+        right=None,
+        down=None,
+        **kwargs,
     ):
         super().__init__(**kwargs)
 
