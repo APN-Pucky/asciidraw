@@ -16,7 +16,12 @@ except ImportError:
 
 
 class Style:
-    def __init__(self, style=None, color=None, wrap=lambda x: x, **kwargs):  # noqa: ARG002
+    def __init__(self, style=None, color=None, wrap=None, **kwargs):  # noqa: ARG002
+        if wrap is None:
+
+            def wrap(x):
+                return x
+
         if color is None:
             self.color = lambda x: x
         else:
